@@ -46,6 +46,6 @@
 	"categories": [
 		"Other"
 	],
-	"contributes": {},
-	"displayName": "Binary Plist"
+	"displayName": "Binary Plist",
+	"icon": "icon.png"
 }
