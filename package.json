@@ -1,7 +1,20 @@
 {
 	"name": "binary-plist",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "Decodes binary plist files by opening a new tab with decoded XML and saving it back to binary on save.",
+	"keywords": [
+		"binary",
+		"plist",
+		"xml"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/dnicolson/binary-plist.git"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "David Nicolson"
+	},
 	"main": "./out/extension.js",
 	"scripts": {
 		"compile": "tsc -p ./",
@@ -44,8 +57,9 @@
 		"*"
 	],
 	"categories": [
-		"Other"
+		"Programming Languages"
 	],
 	"displayName": "Binary Plist",
-	"icon": "icon.png"
+	"icon": "icon.png",
+	"publisher": "dnicolson"
 }
