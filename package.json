@@ -63,6 +63,17 @@
 	"categories": [
 		"Programming Languages"
 	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "plist",
+				"extensions": [
+					".plist",
+					".strings"
+				]
+			}
+		]
+	},
 	"displayName": "Binary Plist",
 	"icon": "icon.png",
 	"publisher": "dnicolson"
