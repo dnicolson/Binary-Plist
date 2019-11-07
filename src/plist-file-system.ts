@@ -1,18 +1,25 @@
 import * as vscode from 'vscode';
 const util = require('util');
-const plist = require('simple-plist');
+
+import { PlistFileFormat } from './plist-file-format';
 
 export class PlistFileSystemProvider implements vscode.FileSystemProvider {
 	readFile(uri: vscode.Uri): Uint8Array {
-		const xmlString = plist.stringify(plist.readFileSync(uri.fsPath));
+		const plistFileFormat = new PlistFileFormat;
+		const xmlString = plistFileFormat.binaryToXml(uri.fsPath);
 		const stringArray = new util.TextEncoder('utf-8').encode(xmlString);
 		return stringArray;
 	}
 
-	writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean; }): void {
-		const xmlString = new util.TextDecoder('utf-8').decode(content);
-		const object = plist.parse(xmlString);
-		plist.writeBinaryFileSync(uri.fsPath, object, (err: Error) => { if (err) { throw err; } });
+	async writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean; }): Promise<void> {
+		try {
+			const xmlString = new util.TextDecoder('utf-8').decode(content);
+			const plistFileFormat = new PlistFileFormat;
+			await plistFileFormat.xmlToBinary(uri.fsPath, xmlString);
+			vscode.window.showInformationMessage('Plist file successfully saved.');
+		} catch(error) {
+			vscode.window.showErrorMessage(`An error occurred saving the file: ${error}`);
+		}
 	}
 
 	stat(uri: vscode.Uri): vscode.FileStat | Thenable<vscode.FileStat> {

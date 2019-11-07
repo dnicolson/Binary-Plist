@@ -40,6 +40,7 @@
 		]
 	},
 	"dependencies": {
+		"hasbin": "^1.2.3",
 		"simple-plist": "^1.0.0",
 		"util": "^0.12.0"
 	},
