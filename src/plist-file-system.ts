@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-const util = require('util');
+import * as util from 'util';
 
 import { PlistFileFormat } from './plist-file-format';
 
@@ -7,13 +7,13 @@ export class PlistFileSystemProvider implements vscode.FileSystemProvider {
   readFile(uri: vscode.Uri): Uint8Array {
     const plistFileFormat = new PlistFileFormat;
     const xmlString = plistFileFormat.binaryToXml(uri.fsPath);
-    const stringArray = new util.TextEncoder('utf-8').encode(xmlString);
+    const stringArray = new util.TextEncoder().encode(xmlString);
     return stringArray;
   }
 
   async writeFile(uri: vscode.Uri, content: Uint8Array, options: { create: boolean; overwrite: boolean; }): Promise<void> {
     try {
-      const xmlString = new util.TextDecoder('utf-8').decode(content);
+      const xmlString = new util.TextDecoder().decode(content);
       const plistFileFormat = new PlistFileFormat;
       await plistFileFormat.xmlToBinary(uri.fsPath, xmlString);
       vscode.window.showInformationMessage('Plist file successfully saved.');
