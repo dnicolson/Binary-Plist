@@ -41,19 +41,19 @@
 	},
 	"dependencies": {
 		"hasbin": "^1.2.3",
-		"simple-plist": "^1.0.0"
+		"simple-plist": "^1.1.0"
 	},
 	"devDependencies": {
 		"@types/mocha": "^2.2.42",
-		"@types/node": "^10.12.21",
+		"@types/node": "^10.17.5",
 		"@types/tmp": "^0.1.0",
-		"husky": "^2.3.0",
-		"lint-staged": "^8.1.7",
-		"sort-package-json": "^1.22.1",
+		"husky": "^2.7.0",
+		"lint-staged": "^8.2.1",
+		"sort-package-json": "^1.23.1",
 		"tmp": "^0.1.0",
-		"tslint": "^5.12.1",
-		"typescript": "^3.3.1",
-		"vscode": "^1.1.28"
+		"tslint": "^5.20.1",
+		"typescript": "^3.7.2",
+		"vscode": "^1.1.36"
 	},
 	"engines": {
 		"vscode": "^1.34.0"
