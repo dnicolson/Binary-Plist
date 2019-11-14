@@ -10,7 +10,7 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.workspace.onDidOpenTextDocument(async document => {
     if (!document.isUntitled && isBinaryPlist(document.fileName)) {
-      vscode.window.showInformationMessage('XML file changes will be saved as binary in the tab to the left.');
+      vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
       const uri = vscode.Uri.file(document.fileName).with({scheme: 'plist'});
       try {
         const doc = await vscode.workspace.openTextDocument(uri);
