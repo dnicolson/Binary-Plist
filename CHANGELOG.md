@@ -1,3 +1,6 @@
+### Version 0.4.0
+- Set langauge to XML
+
 ### Version 0.3.0
 
 - Added support for `plutil` and `plistlib`
