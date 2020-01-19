@@ -15,6 +15,7 @@ export function activate(context: vscode.ExtensionContext) {
       try {
         const doc = await vscode.workspace.openTextDocument(uri);
         await vscode.window.showTextDocument(doc, { preview: false });
+        vscode.languages.setTextDocumentLanguage(doc, 'xml');
       } catch (error) {
         console.error(error);
       }
