@@ -70,8 +70,7 @@
 			{
 				"id": "plist",
 				"extensions": [
-					".plist",
-					".strings"
+					".plist"
 				]
 			}
 		]
