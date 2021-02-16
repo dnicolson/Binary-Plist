@@ -12,7 +12,7 @@ suite('Plist file system', () => {
     const plistFileSystem = new PlistFileSystemProvider;
     const filePath = path.resolve(__dirname, '../../src/test/fixtures/binary.plist');
     const stringArray = plistFileSystem.readFile(vscode.Uri.file(filePath));
-    assert.equal(!!stringArray.length, true);
+    assert.strictEqual(!!stringArray.length, true);
   });
 
   test('binary file write', async () => {
@@ -22,6 +22,6 @@ suite('Plist file system', () => {
     const stringArray = plistFileSystem.readFile(vscode.Uri.file(filePath));
     await plistFileSystem.writeFile(vscode.Uri.file(tmpobj.name), stringArray, {create: true, overwrite: true});
     const fileStat = fs.statSync(tmpobj.name);
-    assert.equal(fileStat.size, 42);
+    assert.strictEqual(fileStat.size, 42);
   });
 });

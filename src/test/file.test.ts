@@ -8,12 +8,12 @@ suite('File', () => {
 
   test('empty file', () => {
     const filePath = path.resolve(__dirname, '../../src/test/fixtures/empty');
-    assert.equal(isBinaryPlist(filePath), false);
+    assert.strictEqual(isBinaryPlist(filePath), false);
   });
 
   test('xml file', () => {
     const filePath = path.resolve(__dirname, '../../src/test/fixtures/xml.plist');
-    assert.equal(isBinaryPlist(filePath), false);
+    assert.strictEqual(isBinaryPlist(filePath), false);
   });
 
   test('binary plist file', () => {
