@@ -4,11 +4,24 @@ import { PlistFileSystemProvider } from './plist-file-system';
 import { isBinaryPlist } from "./file";
 
 export function activate(context: vscode.ExtensionContext) {
+  let lastClosedPlistDocument: vscode.TextDocument | null;
+
   vscode.workspace.registerFileSystemProvider('plist', new PlistFileSystemProvider(), {
     isCaseSensitive: process.platform === 'linux'
   });
 
+  vscode.workspace.onDidCloseTextDocument(document => {
+    if (document.uri.scheme === 'plist') {
+      lastClosedPlistDocument = document;
+    }
+  });
+
   vscode.workspace.onDidOpenTextDocument(async document => {
+    if (lastClosedPlistDocument && lastClosedPlistDocument.fileName === document.fileName) {
+      lastClosedPlistDocument = null;
+      return;
+    }
+
     if (document.languageId === 'plist' && isBinaryPlist(document.fileName)) {
       vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
       const uri = vscode.Uri.file(document.fileName).with({scheme: 'plist'});
