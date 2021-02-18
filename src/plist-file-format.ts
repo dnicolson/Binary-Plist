@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
-import { execSync, spawnSync }  from 'child_process';
-import { fstat, readFileSync } from 'fs';
+import { spawnSync }  from 'child_process';
 const hasbin = require('hasbin');
 const plist = require('simple-plist');
 
