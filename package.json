@@ -1,7 +1,11 @@
 {
 	"name": "binary-plist",
-	"version": "0.4.0",
+	"displayName": "Binary Plist",
+	"version": "0.5.0",
 	"description": "Decodes binary plist files by opening a new tab with decoded XML and saving it back to binary on save.",
+	"categories": [
+		"Programming Languages"
+	],
 	"keywords": [
 		"binary",
 		"plist",
@@ -15,6 +19,7 @@
 	"author": {
 		"name": "David Nicolson"
 	},
+	"publisher": "dnicolson",
 	"main": "./out/extension.js",
 	"scripts": {
 		"compile": "tsc -p ./",
@@ -24,6 +29,20 @@
 		"vscode:prepublish": "npm run compile",
 		"watch": "tsc -watch -p ./"
 	},
+	"contributes": {
+		"languages": [
+			{
+				"id": "plist",
+				"extensions": [
+					".plist"
+				]
+			}
+		]
+	},
+	"activationEvents": [
+		"onFileSystem:plist",
+		"*"
+	],
 	"husky": {
 		"hooks": {
 			"pre-commit": "lint-staged"
@@ -58,24 +77,5 @@
 	"engines": {
 		"vscode": "^1.34.0"
 	},
-	"activationEvents": [
-		"onFileSystem:plist",
-		"*"
-	],
-	"categories": [
-		"Programming Languages"
-	],
-	"contributes": {
-		"languages": [
-			{
-				"id": "plist",
-				"extensions": [
-					".plist"
-				]
-			}
-		]
-	},
-	"displayName": "Binary Plist",
-	"icon": "icon.png",
-	"publisher": "dnicolson"
+	"icon": "icon.png"
 }

@@ -1,3 +1,9 @@
+### Version 0.5.0
+- Check file based on languageId
+- Prevent reopening plist on close after restart
+- Prevent reopening open plist after restart
+- Improve reliability of Python parser
+
 ### Version 0.4.0
 - Set langauge to XML
 
