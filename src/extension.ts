@@ -22,6 +22,11 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
 
+    const isPlistXmlOpen = vscode.workspace.textDocuments.filter(openDoc => openDoc.fileName === document.fileName && openDoc.uri.scheme === 'plist').length > 0;
+    if (isPlistXmlOpen && document.uri.scheme === 'file') {
+      return;
+    }
+
     if (document.languageId === 'plist' && isBinaryPlist(document.fileName)) {
       vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
       const uri = vscode.Uri.file(document.fileName).with({scheme: 'plist'});
