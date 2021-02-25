@@ -29,15 +29,15 @@ export class PlistFileFormat {
   }
 
   _hasPlistlib(): boolean {
-    const output = hasbin.sync('pythone3') && spawnSync('python3', ['-c', 'import plistlib; plistlib.load']);
-    return String(output.stderr).length === 0;
+    const output = hasbin.sync('python') && spawnSync('python', ['-c', 'import plistlib; plistlib.load']);
+    return String(output.stderr).length === 0 || hasbin.sync('python3');
   }
 
   binaryToXml(uri: string) {
     if (Parser.PLUTIL) {
       return spawnSync('plutil', ['-convert', 'xml1', uri, '-o',  '-']).stdout;
     } else if (Parser.PYTHON) {
-      return spawnSync('python3', ['-c', `import plistlib;\nwith open('${uri.replace(/'/,"\\'")}', 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout;
+      return spawnSync(hasbin.sync('python3') ? 'python3' : 'python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout;
     } else if (Parser.NODE) {
       return plist.stringify(plist.readFileSync(uri));
     }
@@ -61,10 +61,10 @@ pl = plistlib.loads(sys.stdin.read().encode('utf-8'), fmt=plistlib.FMT_XML)
 plistlib.dump(pl, fp, fmt=plistlib.FMT_BINARY)
 path = fp.name
 fp.close()
-shutil.copy(path, '${uri.replace(/'/,"\\'")}')
+shutil.copy(path, """${uri.replace(/\\/g,'\\\\')}""")
 os.remove(path)
 `;
-      const output = spawnSync('python3', ['-c', python], { input: xmlString });
+      const output = spawnSync(hasbin.sync('python3') ? 'python3' : 'python', ['-c', python], { input: xmlString });
       if (String(output.stderr).length) {
         return Promise.reject(String(output.stderr));
       }
