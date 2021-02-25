@@ -1,3 +1,8 @@
+### Version 0.5.1
+- Add Node cancel button error text
+- Fix Python parsing on Windows
+- Refactor parser engines
+
 ### Version 0.5.0
 - Check file based on languageId
 - Prevent reopening plist on close after restart
