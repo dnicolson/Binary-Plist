@@ -73,7 +73,7 @@ os.remove(path)
         placeHolder: 'Values of type real that are whole numbers will be saved as type integer. Continue?'
       });
       if (result !== 'Continue') {
-        return Promise.reject();
+        return Promise.reject('Save cancelled.');
       }
       const originalConsoleError = console.error;
       const originalConsoleWarn = console.warn;
