@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
 
-    if (document.languageId === 'plist' && isBinaryPlist(document.fileName)) {
+    if (document.uri.scheme === 'file' && document.languageId === 'plist' && isBinaryPlist(document.fileName)) {
       vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
       const uri = vscode.Uri.file(document.fileName).with({scheme: 'plist'});
       try {
