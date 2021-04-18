@@ -1,3 +1,8 @@
+### Version 0.5.2
+- Fix duplicate info message on VS Code 1.55.0+
+- Fix vulnerabilities
+- Update dependencies
+
 ### Version 0.5.1
 - Add Node cancel button error text
 - Fix Python parsing on Windows
