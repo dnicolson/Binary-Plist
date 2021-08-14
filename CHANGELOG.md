@@ -1,3 +1,8 @@
+### Version 0.6.0
+- Create LICENSE
+- Retrofit extension into new structure
+- Add message for files from a previous session
+
 ### Version 0.5.2
 - Fix duplicate info message on VS Code 1.55.0+
 
