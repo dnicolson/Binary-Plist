@@ -1,3 +1,10 @@
+### Version 0.6.0
+- Bump lodash from 4.17.20 to 4.17.21
+- Bump hosted-git-info from 2.8.5 to 2.8.9
+- Fix vulnerabilities
+- Create LICENSE
+- Retrofit extension into new structure
+
 ### Version 0.5.2
 - Fix duplicate info message on VS Code 1.55.0+
 
