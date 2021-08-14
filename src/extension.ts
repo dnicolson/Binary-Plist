@@ -6,6 +6,11 @@ import { isBinaryPlist } from "./file";
 export function activate(context: vscode.ExtensionContext) {
   let lastClosedPlistDocument: vscode.TextDocument | null;
 
+  const document = vscode.workspace.textDocuments[0];
+  if (document && document.uri.scheme === 'file' && document.languageId === 'plist' && isBinaryPlist(document.fileName)) {
+    vscode.window.showInformationMessage('This is a binary plist file from a previous session, open it again to make changes.');
+  }
+
   vscode.workspace.registerFileSystemProvider('plist', new PlistFileSystemProvider(), {
     isCaseSensitive: process.platform === 'linux'
   });
