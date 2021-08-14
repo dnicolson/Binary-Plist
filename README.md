@@ -2,7 +2,7 @@
 
 A Visual Studio Code extension that enables editing of binary property list files as XML. It is inspired by the [BinaryPlist](https://github.com/tyrone-sudeium/st3-binaryplist) Sublime Text package, although the experience is not as seamless (the user must agree to opening a binary file and the editing takes place in an additional tab). A virtual file system is used to achieve this using the `FileSystemProvider` API.
 
-The extension is cross-platform but primarily uses the macOS `plutil` binary for conversion, the Python `plistlib` is used as an alterntative if available. The node package `simple-plist` is used as a fallback but due to JavaScript not having a float type `real` values that are whole numbers will be cast to `integer` types (a warning dialog is shown first).
+The extension is cross-platform but primarily uses the macOS `plutil` binary for conversion, the Python `plistlib` is used as an alternative if available. The node package `simple-plist` is used as a fallback but due to JavaScript not having a float type `real` values that are whole numbers will be cast to `integer` types (a warning dialog is shown first).
 
 ## Usage
 
