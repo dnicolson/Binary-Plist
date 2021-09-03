@@ -16,7 +16,7 @@ suite('Plist file format', () => {
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
     const fileStat = fs.statSync(tmpobj.name);
     assert.strictEqual(fileStat.size, 42);
-  });
+  }).timeout(10000);
 
   test('python read and write', async () => {
     const plistFileFormat = new PlistFileFormat('PYTHON');
