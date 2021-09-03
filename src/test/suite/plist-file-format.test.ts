@@ -30,6 +30,10 @@ suite('Plist file format', () => {
   });
 
   test('plutil read and write', async () => {
+    if (process.platform !== 'darwin') {
+      return;
+    }
+
     const plistFileFormat = new PlistFileFormat('PLUTIL');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = plistFileFormat.binaryToXml(filePath);
