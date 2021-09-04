@@ -1,0 +1,5 @@
+rules:
+  - minApprovals:
+      NONE: 0
+    requiredLabels:
+      - dependencies
