@@ -10,7 +10,7 @@ interface Parser {
 
 class PlutilParser implements Parser {
   toXml(uri: string): string {
-    return spawnSync('plutil', ['-convert', 'xml1', uri, '-o', '-']).stdout;
+    return spawnSync('plutil', ['-convert', 'xml1', uri, '-o', '-']).stdout.toString();
   }
   async toBinary(uri: string, xmlString: string): Promise<any> {
     const output = spawnSync('plutil', ['-convert', 'binary1', '-o', uri, '-'], { input: xmlString });
@@ -25,7 +25,7 @@ class PlutilParser implements Parser {
 
 class PythonParser implements Parser {
   toXml(uri: string): string {
-    return spawnSync(hasbin.sync('python3') ? 'python3' : 'python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout;
+    return spawnSync(hasbin.sync('python3') ? 'python3' : 'python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout.toString();
   }
   async toBinary(uri: string, xmlString: string): Promise<any> {
     const python = `
