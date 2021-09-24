@@ -60,7 +60,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.31.2",
 		"@typescript-eslint/parser": "^4.31.2",
 		"eslint": "^7.19.0",
-		"glob": "^7.1.6",
+		"glob": "^7.2.0",
 		"husky": "^7.0.2",
 		"lint-staged": "^11.0.0",
 		"mocha": "^9.1.1",
