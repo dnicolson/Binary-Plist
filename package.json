@@ -63,7 +63,7 @@
 		"glob": "^7.2.0",
 		"husky": "^7.0.2",
 		"lint-staged": "^11.0.0",
-		"mocha": "^9.1.1",
+		"mocha": "^9.1.2",
 		"sort-package-json": "^1.52.0",
 		"tmp": "^0.2.1",
 		"typescript": "^4.4.3",
