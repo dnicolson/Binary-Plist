@@ -1,7 +1,7 @@
 {
 	"name": "binary-plist",
 	"displayName": "Binary Plist",
-	"version": "0.6.0",
+	"version": "0.7.0",
 	"description": "Decodes binary plist files by opening a new tab with decoded XML and saving it back to binary on save.",
 	"categories": [
 		"Programming Languages"
@@ -24,11 +24,11 @@
 	"scripts": {
 		"compile": "tsc -p ./",
 		"lint": "eslint src --ext ts",
+		"prepare": "husky install",
 		"pretest": "npm run compile && npm run lint",
 		"test": "node ./out/test/runTest.js",
 		"vscode:prepublish": "npm run compile",
-		"watch": "tsc -watch -p ./",
-		"prepare": "husky install"
+		"watch": "tsc -watch -p ./"
 	},
 	"contributes": {
 		"languages": [
@@ -70,7 +70,7 @@
 		"vscode-test": "^1.5.0"
 	},
 	"engines": {
-		"vscode": "^1.59.0"
+		"vscode": "^1.61.0"
 	},
 	"icon": "icon.png"
 }
