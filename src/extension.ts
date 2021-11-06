@@ -7,7 +7,8 @@ export function activate(context: vscode.ExtensionContext) {
   let lastClosedPlistDocument: vscode.TextDocument | null;
 
   const document = vscode.workspace.textDocuments[0];
-  if (document && document.uri.scheme === 'file' && document.languageId === 'plist' && isBinaryPlist(document.fileName)) {
+
+  if (document && document.uri && document.uri.scheme === 'file' && isBinaryPlist(document.fileName, document.languageId)) {
     vscode.window.showInformationMessage('This is a binary plist file from a previous session, open it again to make changes.');
   }
 
@@ -36,7 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
       return;
     }
 
-    if (document.uri.scheme === 'file' && document.languageId === 'plist' && isBinaryPlist(document.fileName)) {
+    if (document.uri.scheme === 'file' && isBinaryPlist(document.fileName, document.languageId)) {
       vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
       const uri = vscode.Uri.file(document.fileName).with({scheme: 'plist'});
       try {
