@@ -1,3 +1,7 @@
+### Version 0.8.0
+- Preserve syntax highlighting after reopening
+- Fix binary data plist files in VS Code 1.60.0+
+
 ### Version 0.7.0
 - Fix 32-bit and 64-bit integer parsing in dependencies
 - Add message for files from a previous session
