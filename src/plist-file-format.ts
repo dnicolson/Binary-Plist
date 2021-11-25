@@ -79,9 +79,9 @@ class NodeParser implements Parser {
 export class PlistFileFormat {
   engine: Parser;
   constructor(parser: string = '') {
-    if (parser === 'PLUTIL' || this._hasPlutil()) {
+    if (parser === 'PLUTIL' || (!parser && this._hasPlutil())) {
       this.engine = new PlutilParser();
-    } else if (parser === 'PYTHON' || this._hasPlistlib()) {
+    } else if (parser === 'PYTHON' || (!parser && this._hasPlistlib())) {
       this.engine = new PythonParser();
     } else {
       this.engine = new NodeParser();

@@ -1,4 +1,5 @@
 import * as assert from 'assert';
+import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tmp from 'tmp';
@@ -12,11 +13,15 @@ suite('Plist file format', () => {
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = plistFileFormat.binaryToXml(filePath);
 
+    vscode.window.showQuickPick = (items: readonly string[] | Thenable<readonly string[]>) => {
+      return Promise.resolve('Continue') as Thenable<any>;
+    };
+
     const tmpobj = tmp.fileSync();
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
     const fileStat = fs.statSync(tmpobj.name);
     assert.strictEqual(fileStat.size, 42);
-  }).timeout(10000);
+  });
 
   test('python read and write', async () => {
     const plistFileFormat = new PlistFileFormat('PYTHON');
