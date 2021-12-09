@@ -56,7 +56,7 @@
 		"@types/mocha": "^9.0.0",
 		"@types/node": "^16.11.12",
 		"@types/tmp": "^0.2.2",
-		"@types/vscode": "^1.62.0",
+		"@types/vscode": "^1.63.0",
 		"@typescript-eslint/eslint-plugin": "^5.5.0",
 		"@typescript-eslint/parser": "^5.0.0",
 		"eslint": "^8.2.0",
