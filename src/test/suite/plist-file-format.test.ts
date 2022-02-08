@@ -32,7 +32,7 @@ suite('Plist file format', () => {
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
     const fileStat = fs.statSync(tmpobj.name);
     assert.strictEqual(fileStat.size, 42);
-  }).timeout(10000);
+  }).timeout(20000);
 
   test('plutil read and write', async () => {
     if (process.platform !== 'darwin') {
