@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { spawnSync }  from 'child_process';
-const hasbin = require('hasbin');
+import * as commandExists from 'command-exists';
 import * as plist from 'simple-plist';
 
 interface Parser {
@@ -25,7 +25,7 @@ class PlutilParser implements Parser {
 
 class PythonParser implements Parser {
   toXml(uri: string): string {
-    return spawnSync(hasbin.sync('python3') ? 'python3' : 'python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout.toString();
+    return spawnSync(commandExists.sync('python3') ? 'python3' : 'python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout.toString();
   }
   async toBinary(uri: string, xmlString: string): Promise<any> {
     const python = `
@@ -39,7 +39,7 @@ fp.close()
 shutil.copy(path, """${uri.replace(/\\/g,'\\\\')}""")
 os.remove(path)
 `;
-    const output = spawnSync(hasbin.sync('python3') ? 'python3' : 'python', ['-c', python], { input: xmlString });
+    const output = spawnSync(commandExists.sync('python3') ? 'python3' : 'python', ['-c', python], { input: xmlString });
     if (String(output.stderr).length) {
       return Promise.reject(String(output.stderr));
     }
@@ -89,12 +89,17 @@ export class PlistFileFormat {
   }
 
   _hasPlutil(): boolean {
-    return hasbin.sync('plutil');
+    return commandExists.sync('plutil');
   }
 
   _hasPlistlib(): boolean {
-    const output = hasbin.sync('python') && spawnSync('python', ['-c', 'import plistlib; plistlib.load']);
-    return String(output.stderr).length === 0 || hasbin.sync('python3');
+    let hasPython2 = false;
+    if (commandExists.sync('python')) {
+      if (spawnSync('python', ['-c', 'import plistlib; plistlib.load']).stderr.length === 0) {
+        hasPython2 = true;
+      }
+    }
+    return hasPython2 || commandExists.sync('python3');
   }
 
   binaryToXml(uri: string): string {
