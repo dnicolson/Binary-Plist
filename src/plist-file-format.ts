@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { spawnSync }  from 'child_process';
 const hasbin = require('hasbin');
-const plist = require('simple-plist');
+import * as plist from 'simple-plist';
 
 interface Parser {
   toXml: (uri: string) => string;
