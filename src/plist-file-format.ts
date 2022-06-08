@@ -25,7 +25,7 @@ class PlutilParser implements Parser {
 
 class PythonParser implements Parser {
   toXml(uri: string): string {
-    return spawnSync(commandExists.sync('python3') ? 'python3' : 'python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout.toString();
+    return spawnSync('python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout.toString();
   }
   async toBinary(uri: string, xmlString: string): Promise<void> {
     const python = `
@@ -39,7 +39,7 @@ fp.close()
 shutil.copy(path, """${uri.replace(/\\/g,'\\\\')}""")
 os.remove(path)
 `;
-    const output = spawnSync(commandExists.sync('python3') ? 'python3' : 'python', ['-c', python], { input: xmlString });
+    const output = spawnSync('python', ['-c', python], { input: xmlString });
     if (String(output.stderr).length) {
       throw Error(String(output.stderr));
     }
@@ -92,13 +92,14 @@ export class PlistFileFormat {
   }
 
   _hasPlistlib(): boolean {
-    let hasPython2 = false;
     if (commandExists.sync('python')) {
-      if (spawnSync('python', ['-c', 'import plistlib; plistlib.load']).stderr.length === 0) {
-        hasPython2 = true;
+      const output = spawnSync('python', ['-c', 'import plistlib; plistlib.load']);
+      if (output.stderr.length === 0) {
+        return true;
       }
     }
-    return hasPython2 || commandExists.sync('python3');
+
+    return false;
   }
 
   binaryToXml(uri: string): string {
