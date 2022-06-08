@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import * as vscode from 'vscode';
+import { spawnSync }  from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as tmp from 'tmp';
@@ -24,6 +25,10 @@ suite('Plist file format', () => {
   });
 
   test('python read and write', async () => {
+    if (spawnSync('python', ['-c', 'import plistlib; plistlib.load']).stderr.length) {
+      return;
+    }
+
     const plistFileFormat = new PlistFileFormat('PYTHON');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = plistFileFormat.binaryToXml(filePath);
