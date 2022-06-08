@@ -29,6 +29,6 @@ suite('Plist file system', () => {
     const stringArray = plistFileSystem.readFile(vscode.Uri.file(filePath));
     await plistFileSystem.writeFile(vscode.Uri.file(tmpobj.name), stringArray, {create: true, overwrite: true});
     const fileStat = fs.statSync(tmpobj.name);
-    assert.strictEqual(fileStat.size, 42);
+    assert.strictEqual(fileStat.size, 68);
   });
 });

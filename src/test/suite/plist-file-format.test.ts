@@ -21,7 +21,7 @@ suite('Plist file format', () => {
     const tmpobj = tmp.fileSync();
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
     const fileStat = fs.statSync(tmpobj.name);
-    assert.strictEqual(fileStat.size, 42);
+    assert.strictEqual(fileStat.size, 68);
   });
 
   test('python read and write', async () => {
@@ -36,7 +36,7 @@ suite('Plist file format', () => {
     const tmpobj = tmp.fileSync();
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
     const fileStat = fs.statSync(tmpobj.name);
-    assert.strictEqual(fileStat.size, 42);
+    assert.strictEqual(fileStat.size, 68);
   }).timeout(20000);
 
   test('plutil read and write', async () => {
@@ -51,6 +51,6 @@ suite('Plist file format', () => {
     const tmpobj = tmp.fileSync();
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
     const fileStat = fs.statSync(tmpobj.name);
-    assert.strictEqual(fileStat.size, 42);
+    assert.strictEqual(fileStat.size, 68);
   });
 });
