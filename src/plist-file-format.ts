@@ -27,13 +27,15 @@ class PlutilParser implements Parser {
 class PythonParser implements Parser {
   toXml(uri: string): string {
     const python = `
-import plistlib
+import sys, codecs, plistlib
+
+sys.stdout = codecs.getwriter('utf8')(sys.stdout.buffer)
 
 fp = open("""${uri.replace(/\\/g,'\\\\')}""", 'rb')
 pl = plistlib.load(fp)
 print(plistlib.dumps(pl).decode('utf-8'))
 `;
-    const output = spawnSync('python', ['-X', 'utf8', '-c', python], { encoding: 'utf8' });
+    const output = spawnSync('python', ['-c', python], { encoding: 'utf8' });
     if (String(output.stderr).length) {
       throw Error(String(output.stderr));
     }
@@ -42,7 +44,9 @@ print(plistlib.dumps(pl).decode('utf-8'))
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
     const python = `
-import sys, os, tempfile, shutil, plistlib
+import sys, os, codecs, tempfile, shutil, plistlib
+
+sys.stdin = codecs.getreader('utf8')(sys.stdin.buffer)
 
 fp = tempfile.NamedTemporaryFile(mode='wb', delete=False)
 pl = plistlib.loads(sys.stdin.read().encode('utf-8'), fmt=plistlib.FMT_XML)
@@ -52,7 +56,7 @@ fp.close()
 shutil.copy(path, """${uri.replace(/\\/g,'\\\\')}""")
 os.remove(path)
 `;
-    const output = spawnSync('python', ['-X', 'utf8', '-c', python], { input: xmlString, encoding: 'utf8' });
+    const output = spawnSync('python', ['-c', python], { input: xmlString, encoding: 'utf8' });
     if (String(output.stderr).length) {
       throw Error(String(output.stderr));
     }
