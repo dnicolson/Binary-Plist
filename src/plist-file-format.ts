@@ -12,6 +12,7 @@ class PlutilParser implements Parser {
   toXml(uri: string): string {
     return String(spawnSync('plutil', ['-convert', 'xml1', uri, '-o', '-']).stdout);
   }
+
   async toBinary(uri: string, xmlString: string): Promise<void> {
     const output = spawnSync('plutil', ['-convert', 'binary1', '-o', uri, '-'], { input: xmlString });
     if (String(output.stdout).length) {
@@ -38,6 +39,7 @@ print(plistlib.dumps(pl).decode('utf-8'))
     }
     return String(output.stdout);
   }
+
   async toBinary(uri: string, xmlString: string): Promise<void> {
     const python = `
 import sys, os, tempfile, shutil, plistlib
@@ -56,10 +58,12 @@ os.remove(path)
     }
   }
 }
+
 class NodeParser implements Parser {
   toXml(uri: string): string {
     return plist.stringify(plist.readFileSync(uri));
   }
+
   async toBinary(uri: string, xmlString: string): Promise<void> {
     const result = await vscode.window.showQuickPick(['Continue', 'Cancel'], {
       placeHolder: 'Values of type real that are whole numbers will be saved as type integer. Continue?'
