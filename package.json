@@ -1,7 +1,7 @@
 {
 	"name": "binary-plist",
 	"displayName": "Binary Plist",
-	"version": "0.8.0",
+	"version": "0.9.0",
 	"description": "Decodes binary plist files by opening a new tab with decoded XML and saving it back to binary on save.",
 	"categories": [
 		"Programming Languages"
@@ -71,7 +71,7 @@
 		"vscode-test": "^1.5.0"
 	},
 	"engines": {
-		"vscode": "^1.62.0"
+		"vscode": "^1.63.1"
 	},
 	"icon": "icon.png"
 }

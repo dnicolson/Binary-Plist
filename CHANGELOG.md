@@ -1,3 +1,7 @@
+### Version 0.9.0
+- Simplify Python detection
+- Fix Python character encoding on Windows
+
 ### Version 0.8.0
 - Preserve syntax highlighting after reopening
 - Fix binary data plist files in VS Code 1.60.0+
