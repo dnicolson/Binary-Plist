@@ -25,7 +25,18 @@ class PlutilParser implements Parser {
 
 class PythonParser implements Parser {
   toXml(uri: string): string {
-    return spawnSync('python', ['-c', `import plistlib;\nwith open("""${uri.replace(/\\/g,'\\\\')}""", 'rb') as fp: pl = plistlib.load(fp); print(plistlib.dumps(pl).decode('utf-8'))`]).stdout.toString();
+    const python = `
+import plistlib
+
+fp = open("""${uri.replace(/\\/g,'\\\\')}""", 'rb')
+pl = plistlib.load(fp)
+print(plistlib.dumps(pl).decode('utf-8'))
+`;
+    const output = spawnSync('python', ['-X', 'utf8', '-c', python], { encoding: 'utf8' });
+    if (String(output.stderr).length) {
+      throw Error(String(output.stderr));
+    }
+    return String(output.stdout);
   }
   async toBinary(uri: string, xmlString: string): Promise<void> {
     const python = `
@@ -39,7 +50,7 @@ fp.close()
 shutil.copy(path, """${uri.replace(/\\/g,'\\\\')}""")
 os.remove(path)
 `;
-    const output = spawnSync('python', ['-c', python], { input: xmlString });
+    const output = spawnSync('python', ['-X', 'utf8', '-c', python], { input: xmlString, encoding: 'utf8' });
     if (String(output.stderr).length) {
       throw Error(String(output.stderr));
     }
