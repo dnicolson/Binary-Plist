@@ -12,14 +12,14 @@ suite('Plist file system', () => {
     const plistFileSystem = new PlistFileSystemProvider;
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const stringArray = plistFileSystem.readFile(vscode.Uri.file(filePath));
-    assert.strictEqual(!!stringArray.length, true);
+    assert.strictEqual(Boolean(stringArray.length), true);
   });
 
   test('binary plist file containing binary data file read', () => {
     const plistFileSystem = new PlistFileSystemProvider;
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary-in-binary.plist');
-    const fileStat = fs.statSync(filePath);
-    assert.strictEqual(fileStat.size, 184);
+    const stringArray = plistFileSystem.readFile(vscode.Uri.file(filePath));
+    assert.strictEqual(Boolean(stringArray.length), true);
   });
 
   test('binary plist file write', async () => {

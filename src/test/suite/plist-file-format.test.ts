@@ -14,7 +14,7 @@ suite('Plist file format', () => {
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = plistFileFormat.binaryToXml(filePath);
 
-    vscode.window.showQuickPick = (items: readonly string[] | Thenable<readonly string[]>) => {
+    vscode.window.showQuickPick = (_items: readonly string[] | Thenable<readonly string[]>) => {
       return Promise.resolve('Continue') as Thenable<any>;
     };
 
@@ -24,9 +24,9 @@ suite('Plist file format', () => {
     assert.strictEqual(fileStat.size, 68);
   });
 
-  test('python read and write', async () => {
+  test('python read and write', async function() {
     if (spawnSync('python', ['-c', 'import plistlib; plistlib.load']).stderr.length) {
-      return;
+      this.skip();
     }
 
     const plistFileFormat = new PlistFileFormat('PYTHON');
@@ -39,9 +39,9 @@ suite('Plist file format', () => {
     assert.strictEqual(fileStat.size, 68);
   }).timeout(20000);
 
-  test('plutil read and write', async () => {
+  test('plutil read and write', async function() {
     if (process.platform !== 'darwin') {
-      return;
+      this.skip();
     }
 
     const plistFileFormat = new PlistFileFormat('PLUTIL');
