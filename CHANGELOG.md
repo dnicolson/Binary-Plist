@@ -1,3 +1,10 @@
+### Version 0.9.1
+- Check for Python 3 in tests
+- Add non-ASCII character to test fixture
+- Improve tests
+- Add line breaks
+- Add compatibility for Python <3.7
+
 ### Version 0.9.0
 - Simplify Python detection
 - Fix Python character encoding on Windows
