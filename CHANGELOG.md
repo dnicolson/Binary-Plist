@@ -1,3 +1,6 @@
+### Version 0.9.1
+- Add compatibility for Python <3.7
+
 ### Version 0.9.0
 - Simplify Python detection
 - Fix Python character encoding on Windows
