@@ -4,7 +4,7 @@ import { PlistFileSystemProvider } from './plist-file-system';
 import { isBinaryPlist } from "./file";
 
 export function activate(context: vscode.ExtensionContext) {
-  let lastClosedPlistDocument: vscode.TextDocument | null;
+  let lastClosedPlistXmlPath: string | null;
 
   const document = vscode.workspace.textDocuments[0];
 
@@ -16,10 +16,16 @@ export function activate(context: vscode.ExtensionContext) {
     isCaseSensitive: process.platform === 'linux'
   });
 
-  vscode.workspace.onDidCloseTextDocument(document => {
-    if (document.uri.scheme === 'plist') {
-      lastClosedPlistDocument = document;
-    }
+  vscode.window.tabGroups.onDidChangeTabs(event => {
+    event.closed.forEach(tab => {
+      const tabInput = (tab.input as vscode.TextDocument);
+      if (tabInput.uri.scheme === 'plist') {
+        lastClosedPlistXmlPath = tabInput.uri.path;
+      }
+      if (tabInput.uri.scheme === 'file') {
+        lastClosedPlistXmlPath = null;
+      }
+    });
   });
 
   vscode.workspace.onDidOpenTextDocument(async document => {
@@ -27,12 +33,14 @@ export function activate(context: vscode.ExtensionContext) {
       vscode.languages.setTextDocumentLanguage(document, 'xml');
     }
 
-    if (lastClosedPlistDocument && lastClosedPlistDocument.fileName === document.fileName) {
-      lastClosedPlistDocument = null;
+    // after restart this prevents the XML tab from re-opening after closing
+    if (lastClosedPlistXmlPath && lastClosedPlistXmlPath === document.fileName) {
+      lastClosedPlistXmlPath = null;
       return;
     }
 
-    const isPlistXmlOpen = vscode.workspace.textDocuments.filter(openDoc => openDoc.fileName === document.fileName && openDoc.uri.scheme === 'plist').length > 0;
+    // after restart this prevents the XML tab from being selected when selecting the binary tab
+    const isPlistXmlOpen = vscode.window.tabGroups.activeTabGroup.tabs.filter(tab => (tab.input as vscode.TextDocument).uri.path === document.fileName && (tab.input as vscode.TextDocument).uri.scheme === 'plist').length === 1;
     if (isPlistXmlOpen && document.uri.scheme === 'file') {
       return;
     }
