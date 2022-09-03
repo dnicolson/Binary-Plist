@@ -1,3 +1,7 @@
+### Version 0.10.0
+- Update Visual Studio Code
+- Fix re-opening the same file via the tabGroups API
+
 ### Version 0.9.1
 - Add compatibility for Python <3.7
 
