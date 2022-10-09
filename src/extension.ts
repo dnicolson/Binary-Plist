@@ -29,7 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
 
   vscode.workspace.onDidOpenTextDocument(async document => {
-    if (document.uri.scheme === 'plist') {
+    if (document.uri.scheme === 'plist' || document.uri.path.endsWith('.plist') && !isBinaryPlist(document.fileName, document.languageId)) {
       vscode.languages.setTextDocumentLanguage(document, 'xml');
     }
 
