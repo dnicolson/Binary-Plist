@@ -1,7 +1,7 @@
 {
 	"name": "binary-plist",
 	"displayName": "Binary Plist",
-	"version": "0.10.0",
+	"version": "0.11.0",
 	"description": "Decodes binary plist files by opening a new tab with decoded XML and saving it back to binary on save.",
 	"categories": [
 		"Programming Languages"
