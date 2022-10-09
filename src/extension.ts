@@ -40,7 +40,7 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     // after restart this prevents the XML tab from being selected when selecting the binary tab
-    const isPlistXmlOpen = vscode.window.tabGroups.activeTabGroup.tabs.filter(tab => (tab.input as vscode.TextDocument).uri.path === document.fileName && (tab.input as vscode.TextDocument).uri.scheme === 'plist').length === 1;
+    const isPlistXmlOpen = vscode.window.tabGroups.activeTabGroup.tabs.filter(tab => tab.input && (tab.input as vscode.TextDocument).uri.path === document.fileName && (tab.input as vscode.TextDocument).uri.scheme === 'plist').length === 1;
     if (isPlistXmlOpen && document.uri.scheme === 'file') {
       return;
     }
