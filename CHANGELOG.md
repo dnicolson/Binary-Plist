@@ -1,3 +1,8 @@
+### Version 0.11.0
+- Fix syntax highlighting for XML plist diles
+- Fix logged exception
+- Add package command
+
 ### Version 0.10.0
 - Update Visual Studio Code
 - Fix re-opening the same file via the tabGroups API
