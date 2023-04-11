@@ -6,7 +6,7 @@ The extension is cross-platform but primarily uses the macOS `plutil` binary for
 
 ## Usage
 
-Simply open a binary property list file and after clicking "Do you want to open it anyway?" another tab will open in XML and all changes saved will be reflected in the other tab as binary.
+Simply open a binary property list file and after clicking the "Open Anyway" button and choosing the default "Text Editor" editor from the list another tab will open in XML and all changes saved will be reflected in the other tab as binary.
 
 If Visual Studio Code does not recognize the file as a `plist` file select it as the language mode. File associations can be used to perform this when a file is opened, the following settings code will associate `.strings` files:
 
