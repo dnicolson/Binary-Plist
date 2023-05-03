@@ -2,6 +2,8 @@ import * as vscode from 'vscode';
 import { spawnSync }  from 'child_process';
 import * as commandExists from 'command-exists';
 import * as plist from 'simple-plist';
+import { readFileSync } from 'fs';
+import { fileSync } from 'tmp';
 
 interface Parser {
   toXml: (uri: string) => string;
@@ -10,7 +12,11 @@ interface Parser {
 
 class PlutilParser implements Parser {
   toXml(uri: string): string {
-    return String(spawnSync('plutil', ['-convert', 'xml1', uri, '-o', '-']).stdout);
+    const tmpFile = fileSync();
+    spawnSync('plutil', ['-convert', 'xml1', uri, '-o', tmpFile.name]);
+    const xmlString = readFileSync(tmpFile.name, 'utf8');
+    tmpFile.removeCallback();
+    return xmlString;
   }
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
