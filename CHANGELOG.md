@@ -1,3 +1,8 @@
+### Version 0.11.1
+- Update README.md
+- Bump yaml and lint-staged
+- Fix 1MB XML output buffer limitation
+
 ### Version 0.11.0
 - Fix syntax highlighting for XML plist diles
 - Fix logged exception
