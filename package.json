@@ -50,7 +50,8 @@
 	},
 	"dependencies": {
 		"command-exists": "^1.2.9",
-		"simple-plist": "^1.3.0"
+		"simple-plist": "^1.3.0",
+		"tmp": "^0.2.1"
 	},
 	"devDependencies": {
 		"@types/command-exists": "^1.2.0",
@@ -67,7 +68,6 @@
 		"lint-staged": "^13.2.1",
 		"mocha": "^9.2.0",
 		"sort-package-json": "^1.54.0",
-		"tmp": "^0.2.1",
 		"typescript": "^4.5.5",
 		"vscode-test": "^1.5.0"
 	},
