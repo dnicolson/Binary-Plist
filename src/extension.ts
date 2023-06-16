@@ -19,11 +19,13 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.window.tabGroups.onDidChangeTabs(event => {
     event.closed.forEach(tab => {
       const tabInput = (tab.input as vscode.TextDocument);
-      if (tabInput.uri.scheme === 'plist') {
-        lastClosedPlistXmlPath = tabInput.uri.path;
-      }
-      if (tabInput.uri.scheme === 'file') {
-        lastClosedPlistXmlPath = null;
+      if (tabInput) {
+        if (tabInput.uri.scheme === 'plist') {
+          lastClosedPlistXmlPath = tabInput.uri.path;
+        }
+        if (tabInput.uri.scheme === 'file') {
+          lastClosedPlistXmlPath = null;
+        }
       }
     });
   });
