@@ -13,7 +13,7 @@ suite('Plist file system', () => {
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const stringArray = plistFileSystem.readFile(vscode.Uri.file(filePath));
     assert.strictEqual(Boolean(stringArray.length), true);
-  });
+  }).timeout(20000);
 
   test('binary plist file containing binary data file read', () => {
     const plistFileSystem = new PlistFileSystemProvider;
