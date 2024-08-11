@@ -18,12 +18,15 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.window.tabGroups.onDidChangeTabs(event => {
     event.closed.forEach(tab => {
-      const tabInput = (tab.input as vscode.TextDocument);
-      if (tabInput.uri.scheme === 'plist') {
-        lastClosedPlistXmlPath = tabInput.uri.path;
-      }
-      if (tabInput.uri.scheme === 'file') {
-        lastClosedPlistXmlPath = null;
+      const tabInput = tab.input as vscode.TextDocument;
+      if (tabInput?.uri) {
+        const { scheme, path } = tabInput.uri;
+
+        if (scheme === 'plist') {
+          lastClosedPlistXmlPath = path;
+        } else if (scheme === 'file') {
+          lastClosedPlistXmlPath = null;
+        }
       }
     });
   });
@@ -46,12 +49,14 @@ export function activate(context: vscode.ExtensionContext) {
     }
 
     if (document.uri.scheme === 'file' && isBinaryPlist(document.fileName, document.languageId)) {
-      vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
       const uri = vscode.Uri.file(document.fileName).with({scheme: 'plist'});
+
       try {
         const doc = await vscode.workspace.openTextDocument(uri);
         await vscode.window.showTextDocument(doc, { preview: false });
+        vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
       } catch (error) {
+        vscode.window.showInformationMessage('An error occurred:' + (error as Error).message);
         console.error(error);
       }
     }
