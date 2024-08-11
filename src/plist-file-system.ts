@@ -3,10 +3,17 @@ import * as util from 'util';
 
 import { PlistFileFormat } from './plist-file-format';
 
+const fixUncPath = (uri: vscode.Uri): string => {
+  if (uri.fsPath.startsWith('\\') && !uri.fsPath.startsWith(`\\${uri.authority}`)) {
+    return `//${uri.authority}${uri.path}`;
+  }
+  return uri.fsPath;
+};
+
 export class PlistFileSystemProvider implements vscode.FileSystemProvider {
   readFile(uri: vscode.Uri): Uint8Array {
     const plistFileFormat = new PlistFileFormat;
-    const xmlString = plistFileFormat.binaryToXml(uri.fsPath);
+    const xmlString = plistFileFormat.binaryToXml(fixUncPath(uri));
     const stringArray = new util.TextEncoder().encode(xmlString);
     return stringArray;
   }
@@ -15,7 +22,7 @@ export class PlistFileSystemProvider implements vscode.FileSystemProvider {
     try {
       const xmlString = new util.TextDecoder().decode(content);
       const plistFileFormat = new PlistFileFormat;
-      await plistFileFormat.xmlToBinary(uri.fsPath, xmlString);
+      await plistFileFormat.xmlToBinary(fixUncPath(uri), xmlString);
       vscode.window.showInformationMessage('Plist file successfully saved.');
     } catch(error) {
       vscode.window.showErrorMessage(`An error occurred saving the file: ${error}`);
