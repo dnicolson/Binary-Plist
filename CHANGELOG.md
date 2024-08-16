@@ -1,3 +1,6 @@
+### Version 0.11.3
+- Prevent TypeError in Extension Host log after closing a settings tab
+
 ### Version 0.11.2
 - Fix tmp dependency
 
