@@ -24,7 +24,7 @@
 	"scripts": {
 		"compile": "tsc -p ./",
 		"lint": "eslint src --ext ts",
-		"package": "npx vsce package",
+		"package": "npx vsce package --allow-star-activation",
 		"prepare": "husky install",
 		"pretest": "npm run compile && npm run lint",
 		"test": "node ./out/test/runTest.js",
