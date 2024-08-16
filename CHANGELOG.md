@@ -1,3 +1,8 @@
+### Version 0.11.4
+
+- Fix Windows UNC paths
+- Improve error handling
+
 ### Version 0.11.3
 - Prevent TypeError in Extension Host log after closing a settings tab
 
