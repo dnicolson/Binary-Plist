@@ -1,3 +1,6 @@
+### Version 0.11.5
+- Fix TypeError with some documents
+
 ### Version 0.11.4
 
 - Fix Windows UNC paths
