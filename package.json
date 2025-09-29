@@ -2,7 +2,7 @@
 	"name": "binary-plist",
 	"displayName": "Binary Plist",
 	"version": "0.11.5",
-	"description": "Decodes binary plist files by opening a new tab with decoded XML and saving it back to binary on save.",
+	"description": "Binary property list editor to view and edit binary plist files as XML.",
 	"categories": [
 		"Programming Languages"
 	],
@@ -24,7 +24,7 @@
 	"scripts": {
 		"compile": "tsc -p ./",
 		"lint": "eslint src --ext ts",
-		"package": "npx vsce package --allow-star-activation",
+		"package": "vsce package",
 		"prepare": "husky install",
 		"pretest": "npm run compile && npm run lint",
 		"test": "node ./out/test/runTest.js",
@@ -32,18 +32,38 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"contributes": {
-		"languages": [
+		"commands": [
 			{
-				"id": "plist",
-				"extensions": [
-					".plist"
-				]
+				"command": "binaryPlistEditor.openWithDefaultEditor",
+				"title": "Open with Default Editor",
+				"category": "Binary Plist"
 			}
-		]
+		],
+		"customEditors": [
+			{
+				"viewType": "binaryPlistEditor.edit",
+				"displayName": "Binary Plist Editor",
+				"selector": [
+					{
+						"filenamePattern": "*.plist"
+					}
+				],
+				"priority": "default"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{
+					"command": "binaryPlistEditor.openWithDefaultEditor",
+					"when": "activeCustomEditorId == binaryPlistEditor.edit",
+					"group": "navigation"
+				}
+			]
+		}
 	},
 	"activationEvents": [
-		"onFileSystem:plist",
-		"*"
+		"onCustomEditor:binaryPlistEditor.edit",
+		"onLanguage:xml"
 	],
 	"lint-staged": {
 		"package.json": "sort-package-json"

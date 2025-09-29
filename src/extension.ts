@@ -1,66 +1,19 @@
 import * as vscode from 'vscode';
-
-import { PlistFileSystemProvider } from './plist-file-system';
-import { isBinaryPlist } from "./file";
+import { BinaryPlistEditorProvider } from './binary-plist-editor-provider';
 
 export function activate(context: vscode.ExtensionContext) {
-  let lastClosedPlistXmlPath: string | null;
+  context.subscriptions.push(BinaryPlistEditorProvider.register(context));
 
-  const document = vscode.workspace.textDocuments[0];
-
-  if (document && document.uri && document.uri.scheme === 'file' && isBinaryPlist(document.fileName, document.languageId)) {
-    vscode.window.showInformationMessage('This is a binary plist file from a previous session, open it again to make changes.');
-  }
-
-  vscode.workspace.registerFileSystemProvider('plist', new PlistFileSystemProvider(), {
-    isCaseSensitive: process.platform === 'linux'
-  });
-
-  vscode.window.tabGroups.onDidChangeTabs(event => {
-    event.closed.forEach(tab => {
-      const tabInput = tab.input as vscode.TextDocument;
-      if (tabInput?.uri) {
-        const { scheme, path } = tabInput.uri;
-
-        if (scheme === 'plist') {
-          lastClosedPlistXmlPath = path;
-        } else if (scheme === 'file') {
-          lastClosedPlistXmlPath = null;
-        }
-      }
-    });
-  });
-
-  vscode.workspace.onDidOpenTextDocument(async document => {
-    if (document.uri.scheme === 'plist' || document.uri.path.endsWith('.plist') && !isBinaryPlist(document.fileName, document.languageId)) {
-      vscode.languages.setTextDocumentLanguage(document, 'xml');
-    }
-
-    // after restart this prevents the XML tab from re-opening after closing
-    if (lastClosedPlistXmlPath && lastClosedPlistXmlPath === document.fileName) {
-      lastClosedPlistXmlPath = null;
-      return;
-    }
-
-    // after restart this prevents the XML tab from being selected when selecting the binary tab
-    const isPlistXmlOpen = vscode.window.tabGroups.activeTabGroup.tabs.filter(tab => tab.input && (tab.input as vscode.TextDocument).uri?.path === document.fileName && (tab.input as vscode.TextDocument).uri.scheme === 'plist').length === 1;
-    if (isPlistXmlOpen && document.uri.scheme === 'file') {
-      return;
-    }
-
-    if (document.uri.scheme === 'file' && isBinaryPlist(document.fileName, document.languageId)) {
-      const uri = vscode.Uri.file(document.fileName).with({scheme: 'plist'});
-
+  const openPlistUris = context.workspaceState.get<{ [key: string]: boolean }>('openPlistUris');
+  if (openPlistUris && typeof openPlistUris === 'object') {
+    for (const fsPath of Object.keys(openPlistUris)) {
       try {
-        const doc = await vscode.workspace.openTextDocument(uri);
-        await vscode.window.showTextDocument(doc, { preview: false });
-        vscode.window.showInformationMessage('Changes to this file will be saved as binary.');
+        vscode.commands.executeCommand('vscode.openWith', vscode.Uri.file(fsPath), 'binaryPlistEditor.edit');
       } catch (error) {
-        vscode.window.showInformationMessage('An error occurred:' + (error as Error).message);
-        console.error(error);
+        console.error('Failed to reopen plist URI with custom editor:', fsPath, error);
       }
     }
-  });
+  }
 }
 
 export function deactivate() {}
