@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
 import { spawnSync }  from 'child_process';
 import * as commandExists from 'command-exists';
-import * as plist from 'simple-plist';
-import { readFileSync } from 'fs';
+import * as plist from "plist";
+import * as bplistCreator from 'bplist-creator';
+import * as bplistParser from 'bplist-parser';
+import { readFileSync, writeFileSync } from 'fs';
 import { fileSync } from 'tmp';
 
 interface Parser {
@@ -71,7 +73,7 @@ os.remove(path)
 
 class NodeParser implements Parser {
   toXml(uri: string): string {
-    return plist.stringify(plist.readFileSync(uri));
+    return plist.build(bplistParser.parseFileSync(uri)[0]);
   }
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
@@ -81,22 +83,14 @@ class NodeParser implements Parser {
     if (result !== 'Continue') {
       throw Error('Save cancelled.');
     }
-    const originalConsoleError = console.error;
-    const originalConsoleWarn = console.warn;
-    console.error = message => { throw Error(`An error occurred saving the file: ${message}`); };
-    console.warn = message => { throw Error(`An error occurred saving the file: ${message}`); };
+    
     try {
-      const object = plist.parse(xmlString);
-      try {
-        plist.writeBinaryFileSync(uri, object);
-      } catch(message) {
-        throw Error(`An error occurred saving the file: ${message}`);
-      }
+      const object = plist.parse(xmlString) as plist.PlistObject | plist.PlistArray;
+      const buffer = bplistCreator(object);
+      writeFileSync(uri, buffer as Uint8Array);
     } catch(message) {
-      throw Error(`An error occurred parsing the XML: ${message}`);
+      throw Error(`An error occurred saving the file: ${message}`);
     }
-    console.error = originalConsoleError;
-    console.warn = originalConsoleWarn;
   }
 }
 
