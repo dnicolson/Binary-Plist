@@ -25,7 +25,8 @@ suite('Plist file format', () => {
   });
 
   test('python read and write', async function() {
-    if (spawnSync('python', ['-c', 'import plistlib; plistlib.load']).stderr.length) {
+    const result = spawnSync('python', ['-c', 'import plistlib; plistlib.load']);
+    if (result.error || (result.stderr && result.stderr.length)) {
       this.skip();
     }
 
