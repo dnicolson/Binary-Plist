@@ -5,7 +5,7 @@ import * as path from 'path';
 import { BinaryPlistEditorProvider } from '../../binary-plist-editor-provider';
 
 suite('BinaryPlistEditorProvider', () => {
-  const fixturesDir = path.resolve(__dirname, '../fixtures');
+  const fixturesDir = path.resolve(__dirname, '../../../src/test/fixtures');
   const binaryPlistPath = path.join(fixturesDir, 'binary.plist');
 
   test('registers the custom editor provider', async () => {
