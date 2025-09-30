@@ -1,3 +1,12 @@
+### Version 1.0.0
+- Replace FileSystemProvider with CustomDocument
+- Update icon
+- Remove lint-staged package
+- Remove simple-plist package
+- Check for invalid characters
+- Update minimum VS Code version
+- Fix TypeScript error
+
 ### Version 0.11.5
 - Fix TypeError with some documents
 
