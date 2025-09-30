@@ -61,7 +61,6 @@
 		}
 	},
 	"activationEvents": [
-		"onCustomEditor:binaryPlistEditor.edit",
 		"onLanguage:xml"
 	],
 	"dependencies": {
@@ -90,7 +89,7 @@
 		"typescript": "^4.5.5"
 	},
 	"engines": {
-		"vscode": "^1.67.2"
+		"vscode": "^1.75.0"
 	},
 	"icon": "icon.png"
 }
