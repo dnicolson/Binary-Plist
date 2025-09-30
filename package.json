@@ -1,7 +1,7 @@
 {
 	"name": "binary-plist",
 	"displayName": "Binary Plist",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"description": "Binary property list editor to view and edit binary plist files as XML.",
 	"categories": [
 		"Programming Languages"
