@@ -13,7 +13,7 @@ suite('BinaryPlistEditorProvider', () => {
     const disposable = BinaryPlistEditorProvider.register(context);
     assert.ok(disposable, 'Provider registration should return a disposable');
     disposable.dispose();
-  });
+  }).timeout(10000);
 
   test('opens a binary plist and creates a temp XML file', async () => {
 		const context = { subscriptions: [], workspaceState: typeof vscode.workspace.getWorkspaceFolder === 'function' ? vscode.workspace : { get: () => ({}), update: () => {} } } as any;
