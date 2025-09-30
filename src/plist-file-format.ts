@@ -6,6 +6,7 @@ import * as bplistCreator from 'bplist-creator';
 import * as bplistParser from 'bplist-parser';
 import { readFileSync, writeFileSync } from 'fs';
 import { fileSync } from 'tmp';
+import { CreateOptions } from 'xmlbuilder';
 
 interface Parser {
   toXml: (uri: string) => string;
@@ -73,7 +74,15 @@ os.remove(path)
 
 class NodeParser implements Parser {
   toXml(uri: string): string {
-    return plist.build(bplistParser.parseFileSync(uri)[0]);
+    const content = bplistParser.parseFileSync(uri)[0];
+    // @ts-ignore
+    const plistContent = plist.build(content, {}, { invalidCharReplacement: '�' } as CreateOptions);
+    if (plistContent.indexOf('�') !== -1) {
+      vscode.window.showWarningMessage(
+        'The “�” symbol appears in this editor, possibly due to control characters in the original file. If you save it now, those symbols will be saved too.'
+      );
+    }
+    return plistContent;
   }
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
