@@ -1,3 +1,6 @@
+### Version 1.0.3
+- Fix repeated saves
+
 ### Version 1.0.2
 
 - Remove simple-plist package dependency
