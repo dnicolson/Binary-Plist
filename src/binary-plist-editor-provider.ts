@@ -66,7 +66,6 @@ export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorPro
           } catch (error) {
             vscode.window.showErrorMessage(`Failed to save binary plist: ${error}`);
           }
-          saveListener.dispose();
         }
       });
 
@@ -77,6 +76,7 @@ export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorPro
             delete openPlistUris[document.uri.fsPath];
             this.context.workspaceState.update('openPlistUris', openPlistUris);
           }
+          saveListener.dispose();
           closeListener.dispose();
         }
       });
