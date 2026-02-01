@@ -29,7 +29,7 @@ export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorPro
 
   async openCustomDocument(uri: vscode.Uri): Promise<BinaryPlistCustomDocument> {
     if (isBinaryPlist(uri.fsPath, 'plist')) {
-      const xmlContent = this.plistFileFormat.binaryToXml(uri.fsPath);
+      const xmlContent = await this.plistFileFormat.binaryToXml(uri.fsPath);
       const base = path.basename(uri.fsPath, path.extname(uri.fsPath));
       const ext = path.extname(uri.fsPath);
       const hash = crypto.createHash('md5').update(uri.fsPath).digest('hex').slice(0, 6);

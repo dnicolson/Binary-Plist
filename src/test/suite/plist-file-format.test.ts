@@ -12,7 +12,7 @@ suite('Plist file format', () => {
   test('node read and write', async () => {
     const plistFileFormat = new PlistFileFormat('NODE');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
-    const xmlString = plistFileFormat.binaryToXml(filePath);
+    const xmlString = await plistFileFormat.binaryToXml(filePath);
 
     vscode.window.showQuickPick = (_items: readonly string[] | Thenable<readonly string[]>) => {
       return Promise.resolve('Continue') as Thenable<any>;
@@ -32,7 +32,7 @@ suite('Plist file format', () => {
 
     const plistFileFormat = new PlistFileFormat('PYTHON');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
-    const xmlString = plistFileFormat.binaryToXml(filePath);
+    const xmlString = await plistFileFormat.binaryToXml(filePath);
 
     const tmpobj = tmp.fileSync();
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
@@ -47,7 +47,7 @@ suite('Plist file format', () => {
 
     const plistFileFormat = new PlistFileFormat('PLUTIL');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
-    const xmlString = plistFileFormat.binaryToXml(filePath);
+    const xmlString = await plistFileFormat.binaryToXml(filePath);
 
     const tmpobj = tmp.fileSync();
     await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);

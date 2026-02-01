@@ -1,40 +1,46 @@
 import * as vscode from 'vscode';
-import { spawnSync }  from 'child_process';
+import { spawnSync, spawn }  from 'child_process';
 import * as commandExists from 'command-exists';
 import * as plist from "plist";
 import * as bplistCreator from 'bplist-creator';
 import * as bplistParser from 'bplist-parser';
-import { readFileSync, writeFileSync } from 'fs';
-import { fileSync } from 'tmp';
+import { writeFileSync } from 'fs';
 import { CreateOptions } from 'xmlbuilder';
 
+async function spawnAsync(command: string, args: string[], input?: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const proc = spawn(command, args);
+    let stdout = '';
+    let stderr = '';
+    
+    proc.stdout.on('data', (data) => { stdout += data; });
+    proc.stderr.on('data', (data) => { stderr += data; });
+    proc.on('close', (code) => code === 0 ? resolve(stdout) : reject(new Error(stderr || `Exit code ${code}`)));
+    proc.on('error', reject);
+    
+    if (input) {
+      proc.stdin.end(input);
+    }
+  });
+}
+
 interface Parser {
-  toXml: (uri: string) => string;
+  toXml: (uri: string) => Promise<string>;
   toBinary: (uri: string, xmlString: string) => Promise<void>;
 }
 
 class PlutilParser implements Parser {
-  toXml(uri: string): string {
-    const tmpFile = fileSync();
-    spawnSync('plutil', ['-convert', 'xml1', uri, '-o', tmpFile.name]);
-    const xmlString = readFileSync(tmpFile.name, 'utf8');
-    tmpFile.removeCallback();
-    return xmlString;
+  async toXml(uri: string): Promise<string> {
+    return await spawnAsync('plutil', ['-convert', 'xml1', uri, '-o', '-']);
   }
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
-    const output = spawnSync('plutil', ['-convert', 'binary1', '-o', uri, '-'], { input: xmlString });
-    if (String(output.stdout).length) {
-      throw Error(String(output.stdout));
-    }
-    if (String(output.stderr).length) {
-      throw Error(String(output.stderr));
-    }
+    await spawnAsync('plutil', ['-convert', 'binary1', '-o', uri, '-'], xmlString);
   }
 }
 
 class PythonParser implements Parser {
-  toXml(uri: string): string {
+  async toXml(uri: string): Promise<string> {
     const python = `
 import sys, codecs, plistlib
 
@@ -44,11 +50,7 @@ fp = open("""${uri.replace(/\\/g,'\\\\')}""", 'rb')
 pl = plistlib.load(fp)
 print(plistlib.dumps(pl).decode('utf-8'))
 `;
-    const output = spawnSync('python', ['-c', python], { encoding: 'utf8' });
-    if (String(output.stderr).length) {
-      throw Error(String(output.stderr));
-    }
-    return String(output.stdout);
+    return await spawnAsync('python', ['-c', python]);
   }
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
@@ -65,15 +67,12 @@ fp.close()
 shutil.copy(path, """${uri.replace(/\\/g,'\\\\')}""")
 os.remove(path)
 `;
-    const output = spawnSync('python', ['-c', python], { input: xmlString, encoding: 'utf8' });
-    if (String(output.stderr).length) {
-      throw Error(String(output.stderr));
-    }
+    await spawnAsync('python', ['-c', python], xmlString);
   }
 }
 
 class NodeParser implements Parser {
-  toXml(uri: string): string {
+  async toXml(uri: string): Promise<string> {
     const content = bplistParser.parseFileSync(uri)[0];
     // @ts-ignore
     const plistContent = plist.build(content, {}, { invalidCharReplacement: '�' } as CreateOptions);
@@ -130,7 +129,7 @@ export class PlistFileFormat {
     return false;
   }
 
-  binaryToXml(uri: string): string {
+  async binaryToXml(uri: string): Promise<string> {
     return this.engine.toXml(uri);
   }
 
