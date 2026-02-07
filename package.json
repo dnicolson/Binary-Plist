@@ -90,8 +90,7 @@
 		"bplist-parser": "^0.3.2",
 		"command-exists": "^1.2.9",
 		"libplist": "^1.0.0",
-		"plist": "github:TooTallNate/plist.js#pull/144/head",
-		"tmp": "^0.2.4"
+		"plist": "github:TooTallNate/plist.js#pull/144/head"
 	},
 	"devDependencies": {
 		"@types/command-exists": "^1.2.0",
@@ -99,7 +98,6 @@
 		"@types/mocha": "^9.1.0",
 		"@types/node": "^17.0.16",
 		"@types/plist": "^3.0.5",
-		"@types/tmp": "^0.2.3",
 		"@types/vscode": "^1.67.2",
 		"@typescript-eslint/eslint-plugin": "^5.11.0",
 		"@typescript-eslint/parser": "^5.11.0",

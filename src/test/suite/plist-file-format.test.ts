@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import { spawnSync }  from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as tmp from 'tmp';
+import * as os from 'os';
 
 import { PlistFileFormat } from '../../plist-file-format';
 
@@ -18,10 +18,12 @@ suite('Plist file format', () => {
       return Promise.resolve('Continue') as Thenable<any>;
     };
 
-    const tmpobj = tmp.fileSync();
-    await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
-    const fileStat = fs.statSync(tmpobj.name);
+    const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}`);
+    fs.writeFileSync(tmpFilePath, '');
+    await plistFileFormat.xmlToBinary(tmpFilePath, xmlString);
+    const fileStat = fs.statSync(tmpFilePath);
     assert.strictEqual(fileStat.size, 68);
+    fs.unlinkSync(tmpFilePath);
   });
 
   test('python read and write', async function() {
@@ -34,10 +36,12 @@ suite('Plist file format', () => {
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
-    const tmpobj = tmp.fileSync();
-    await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
-    const fileStat = fs.statSync(tmpobj.name);
+    const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}`);
+    fs.writeFileSync(tmpFilePath, '');
+    await plistFileFormat.xmlToBinary(tmpFilePath, xmlString);
+    const fileStat = fs.statSync(tmpFilePath);
     assert.strictEqual(fileStat.size, 68);
+    fs.unlinkSync(tmpFilePath);
   }).timeout(20000);
 
   test('plutil read and write', async function() {
@@ -49,10 +53,12 @@ suite('Plist file format', () => {
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
-    const tmpobj = tmp.fileSync();
-    await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
-    const fileStat = fs.statSync(tmpobj.name);
+    const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}`);
+    fs.writeFileSync(tmpFilePath, '');
+    await plistFileFormat.xmlToBinary(tmpFilePath, xmlString);
+    const fileStat = fs.statSync(tmpFilePath);
     assert.strictEqual(fileStat.size, 68);
+    fs.unlinkSync(tmpFilePath);
   });
 
   test('libplist read and write', async () => {
@@ -60,9 +66,11 @@ suite('Plist file format', () => {
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
-    const tmpobj = tmp.fileSync();
-    await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
-    const fileStat = fs.statSync(tmpobj.name);
+    const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}`);
+    fs.writeFileSync(tmpFilePath, '');
+    await plistFileFormat.xmlToBinary(tmpFilePath, xmlString);
+    const fileStat = fs.statSync(tmpFilePath);
     assert.strictEqual(fileStat.size, 68);
+    fs.unlinkSync(tmpFilePath);
   });
 });
