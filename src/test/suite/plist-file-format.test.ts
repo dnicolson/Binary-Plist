@@ -10,7 +10,7 @@ import { PlistFileFormat } from '../../plist-file-format';
 suite('Plist file format', () => {
 
   test('node read and write', async () => {
-    const plistFileFormat = new PlistFileFormat('NODE');
+    const plistFileFormat = new PlistFileFormat('node');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
@@ -30,7 +30,7 @@ suite('Plist file format', () => {
       this.skip();
     }
 
-    const plistFileFormat = new PlistFileFormat('PYTHON');
+    const plistFileFormat = new PlistFileFormat('python');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
@@ -45,7 +45,18 @@ suite('Plist file format', () => {
       this.skip();
     }
 
-    const plistFileFormat = new PlistFileFormat('PLUTIL');
+    const plistFileFormat = new PlistFileFormat('plutil');
+    const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
+    const xmlString = await plistFileFormat.binaryToXml(filePath);
+
+    const tmpobj = tmp.fileSync();
+    await plistFileFormat.xmlToBinary(tmpobj.name, xmlString);
+    const fileStat = fs.statSync(tmpobj.name);
+    assert.strictEqual(fileStat.size, 68);
+  });
+
+  test('libplist read and write', async () => {
+    const plistFileFormat = new PlistFileFormat('libplist');
     const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 

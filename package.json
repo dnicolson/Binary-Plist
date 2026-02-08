@@ -38,6 +38,28 @@
 				"category": "Binary Plist"
 			}
 		],
+		"configuration": {
+			"title": "Binary Plist",
+			"properties": {
+				"binaryPlist.engine": {
+					"type": "string",
+					"default": "libplist",
+					"enum": [
+						"libplist",
+						"plutil",
+						"python",
+						"node"
+					],
+					"enumDescriptions": [
+						"Use libplist",
+						"Use plutil command (macOS only)",
+						"Use Python plistlib module",
+						"Use Node.js bplist-parser and bplist-creator libraries"
+					],
+					"description": "Specify which engine to use for plist conversion"
+				}
+			}
+		},
 		"customEditors": [
 			{
 				"viewType": "binaryPlistEditor.edit",
@@ -67,6 +89,7 @@
 		"bplist-creator": "^0.1.1",
 		"bplist-parser": "^0.3.2",
 		"command-exists": "^1.2.9",
+		"libplist": "^1.0.0",
 		"plist": "github:TooTallNate/plist.js#pull/144/head",
 		"tmp": "^0.2.4"
 	},

@@ -13,11 +13,25 @@ interface BinaryPlistCustomDocument extends vscode.CustomDocument {
 }
 
 export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorProvider<BinaryPlistCustomDocument> {
-  private readonly plistFileFormat = new PlistFileFormat();
+  private plistFileFormat: PlistFileFormat;
   private context: vscode.ExtensionContext;
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
+    const config = vscode.workspace.getConfiguration('binaryPlist');
+    const engine = config.get<string>('engine');
+    this.plistFileFormat = new PlistFileFormat(engine);
+
+    context.subscriptions.push(
+      vscode.workspace.onDidChangeConfiguration((event) => {
+        if (event.affectsConfiguration('binaryPlist.engine')) {
+          const config = vscode.workspace.getConfiguration('binaryPlist');
+          const engine = config.get<string>('engine');
+          this.plistFileFormat = new PlistFileFormat(engine);
+          console.log('Binary plist engine updated to:', engine);
+        }
+      })
+    );
   }
 
   static register(context: vscode.ExtensionContext): vscode.Disposable {
@@ -34,8 +48,7 @@ export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorPro
       const ext = path.extname(uri.fsPath);
       const hash = crypto.createHash('md5').update(uri.fsPath).digest('hex').slice(0, 6);
       const tempName = `${base}.${hash}${ext}`;
-      const tempDir = os.tmpdir();
-      const tempPath = path.join(tempDir, tempName);
+      const tempPath = path.join(os.tmpdir(), tempName);
       fs.writeFileSync(tempPath, xmlContent, 'utf8');
       return {uri, tempFileUri: vscode.Uri.file(tempPath), dispose() {}};
     }

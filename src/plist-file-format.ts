@@ -4,8 +4,9 @@ import * as commandExists from 'command-exists';
 import * as plist from "plist";
 import * as bplistCreator from 'bplist-creator';
 import * as bplistParser from 'bplist-parser';
-import { writeFileSync } from 'fs';
+import { readFile, writeFile } from 'fs/promises';
 import { CreateOptions } from 'xmlbuilder';
+import { binaryToXml as libplistBinaryToXml, xmlToBinary as libplistXmlToBinary } from 'libplist';
 
 async function spawnAsync(command: string, args: string[], input?: string): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -30,6 +31,12 @@ interface Parser {
 }
 
 class PlutilParser implements Parser {
+  constructor() {
+    if (!commandExists.sync('plutil')) {
+      throw new Error('plutil command not found');
+    }
+  }
+
   async toXml(uri: string): Promise<string> {
     return await spawnAsync('plutil', ['-convert', 'xml1', uri, '-o', '-']);
   }
@@ -40,6 +47,17 @@ class PlutilParser implements Parser {
 }
 
 class PythonParser implements Parser {
+  constructor() {
+    if (!commandExists.sync('python')) {
+      throw new Error('python command not found');
+    }
+
+    const output = spawnSync('python', ['-c', 'import plistlib; plistlib.load']);
+    if (output.error || (output.stderr && output.stderr.length > 0) || output.status !== 0) {
+      throw new Error('python plistlib not available');
+    }
+  }
+
   async toXml(uri: string): Promise<string> {
     const python = `
 import sys, codecs, plistlib
@@ -95,38 +113,43 @@ class NodeParser implements Parser {
     try {
       const object = plist.parse(xmlString) as plist.PlistObject | plist.PlistArray;
       const buffer = bplistCreator(object);
-      writeFileSync(uri, buffer as Uint8Array);
+      await writeFile(uri, buffer);
     } catch(message) {
       throw Error(`An error occurred saving the file: ${message}`);
     }
   }
 }
 
+class LibplistParser implements Parser {
+  async toXml(uri: string): Promise<string> {
+    const data = await readFile(uri);
+    return await libplistBinaryToXml(data);
+  }
+
+  async toBinary(uri: string, xmlString: string): Promise<void> {
+    const data = await libplistXmlToBinary(xmlString);
+    await writeFile(uri, data);
+  }
+}
+  
 export class PlistFileFormat {
   engine: Parser;
-  constructor(parser: string = '') {
-    if (parser === 'PLUTIL' || (!parser && this._hasPlutil())) {
-      this.engine = new PlutilParser();
-    } else if (parser === 'PYTHON' || (!parser && this._hasPlistlib())) {
-      this.engine = new PythonParser();
-    } else {
-      this.engine = new NodeParser();
-    }
-  }
-
-  _hasPlutil(): boolean {
-    return commandExists.sync('plutil');
-  }
-
-  _hasPlistlib(): boolean {
-    if (commandExists.sync('python')) {
-      const output = spawnSync('python', ['-c', 'import plistlib; plistlib.load']);
-      if (output.stderr.length === 0) {
-        return true;
+  constructor(parser: string | undefined) {    
+    try {
+      if (parser === 'plutil') {
+        this.engine = new PlutilParser();
+        return;
+      } else if (parser === 'python') {
+        this.engine = new PythonParser();
+        return;
+      } else if (parser === 'node') {
+        this.engine = new NodeParser();
+        return;
       }
+    } catch (error) {
+      vscode.window.showErrorMessage(`Failed to initialize plist engine: ${error}`);
     }
-
-    return false;
+    this.engine = new LibplistParser();
   }
 
   async binaryToXml(uri: string): Promise<string> {
