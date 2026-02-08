@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { spawnSync, spawn }  from 'child_process';
-import * as commandExists from 'command-exists';
+import commandExists from 'command-exists';
 import * as plist from "plist";
-import * as bplistCreator from 'bplist-creator';
-import * as bplistParser from 'bplist-parser';
+import bplistCreator from 'bplist-creator';
+import bplistParser from 'bplist-parser';
 import { readFile, writeFile } from 'fs/promises';
 import { CreateOptions } from 'xmlbuilder';
 import { binaryToXml as libplistBinaryToXml, xmlToBinary as libplistXmlToBinary } from 'libplist';

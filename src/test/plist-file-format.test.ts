@@ -5,13 +5,13 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
 
-import { PlistFileFormat } from '../../plist-file-format';
+import { PlistFileFormat } from '../plist-file-format';
 
 suite('Plist file format', () => {
 
   test('node read and write', async () => {
     const plistFileFormat = new PlistFileFormat('node');
-    const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
+    const filePath = path.resolve(__dirname, '../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
     vscode.window.showQuickPick = (_items: readonly string[] | Thenable<readonly string[]>) => {
@@ -33,7 +33,7 @@ suite('Plist file format', () => {
     }
 
     const plistFileFormat = new PlistFileFormat('python');
-    const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
+    const filePath = path.resolve(__dirname, '../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
     const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}`);
@@ -50,7 +50,7 @@ suite('Plist file format', () => {
     }
 
     const plistFileFormat = new PlistFileFormat('plutil');
-    const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
+    const filePath = path.resolve(__dirname, '../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
     const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}`);
@@ -63,7 +63,7 @@ suite('Plist file format', () => {
 
   test('libplist read and write', async () => {
     const plistFileFormat = new PlistFileFormat('libplist');
-    const filePath = path.resolve(__dirname, '../../../src/test/fixtures/binary.plist');
+    const filePath = path.resolve(__dirname, '../../src/test/fixtures/binary.plist');
     const xmlString = await plistFileFormat.binaryToXml(filePath);
 
     const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}`);
