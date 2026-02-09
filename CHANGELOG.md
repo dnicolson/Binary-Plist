@@ -1,3 +1,7 @@
+### Version 2.0.0
+
+- Add libplist engine and engine choice option
+
 ### Version 1.0.3
 - Fix repeated saves
 
