@@ -10,7 +10,3 @@ The extension uses the `libplist` library by default for cross-platform plist co
 - **plutil**: macOS native command-line utility
 - **python**: Python's plistlib module (requires Python with plistlib)
 - **node**: Node.js bplist-parser and bplist-creator libraries (note: due to JavaScript not having a float type, `real` values that are whole numbers will be cast to `integer` types)
-
-## Tests
-
-Tests can be run with `npm test` or running `Extension Tests` in the Visual Studio Code debugger.
