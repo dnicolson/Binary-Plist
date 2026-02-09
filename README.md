@@ -4,7 +4,12 @@ A Visual Studio Code extension that enables editing of binary property list file
 
 The extension uses VS Code's Custom Editor API to seamlessly handle the conversion between binary and XML formats. When you save the XML file, it's automatically converted back to binary format.
 
-The extension is cross-platform but primarily uses the macOS `plutil` binary for conversion, with Python `plistlib` as an alternative if available. The Node.js package `simple-plist` is used as a fallback, though due to JavaScript not having a float type, `real` values that are whole numbers will be cast to `integer` types (a warning dialog is shown first).
+The extension uses the `libplist` library by default for cross-platform plist conversion. You can configure a different engine through the `binaryPlist.engine` setting:
+
+- **libplist** (default): Cross-platform library with reliable conversion
+- **plutil**: macOS native command-line utility
+- **python**: Python's plistlib module (requires Python with plistlib)
+- **node**: Node.js bplist-parser and bplist-creator libraries (note: due to JavaScript not having a float type, `real` values that are whole numbers will be cast to `integer` types)
 
 ## Tests
 
