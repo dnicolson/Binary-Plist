@@ -92,16 +92,16 @@
 		"plist": "github:TooTallNate/plist.js#pull/144/head"
 	},
 	"devDependencies": {
-		"@types/command-exists": "^1.2.0",
+		"@types/command-exists": "^1.2.3",
 		"@types/plist": "^3.0.5",
 		"@types/mocha": "^10.0.10",
-		"@types/node": "22.x",
-		"@types/vscode": "^1.109.0",
-		"@vscode/test-cli": "^0.0.12",
-		"@vscode/test-electron": "^2.5.2",
-		"eslint": "^9.39.2",
-		"typescript-eslint": "^8.54.0",
-		"typescript": "^5.9.3"
+		"typescript": "^5.9.3",
+		"@types/node": "26.x",
+		"@types/vscode": "^1.125.0",
+		"@vscode/test-cli": "^0.0.15",
+		"@vscode/test-electron": "^3.1.0",
+		"eslint": "^10.8.1",
+		"typescript-eslint": "^8.67.0"
 	},
 	"engines": {
 		"vscode": "^1.109.0"
