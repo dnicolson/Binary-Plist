@@ -3,7 +3,7 @@ import { spawnSync, spawn }  from 'child_process';
 import commandExists from 'command-exists';
 import * as plist from "plist";
 import bplistCreator from 'bplist-creator';
-import bplistParser from 'bplist-parser';
+import { parseFileSync } from 'bplist-parser';
 import { readFile, writeFile } from 'fs/promises';
 import { CreateOptions } from 'xmlbuilder';
 import { binaryToXml as libplistBinaryToXml, xmlToBinary as libplistXmlToBinary } from 'libplist';
@@ -96,7 +96,7 @@ os.remove(path)
 
 class NodeParser implements Parser {
   async toXml(uri: string): Promise<string> {
-    const content = bplistParser.parseFileSync(uri)[0];
+    const content = parseFileSync(uri)[0];
     // @ts-ignore
     const plistContent = plist.build(content, {}, { invalidCharReplacement: '�' } as CreateOptions);
     if (plistContent.indexOf('�') !== -1) {

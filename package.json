@@ -76,8 +76,8 @@
 		"onLanguage:xml"
 	],
 	"dependencies": {
-		"bplist-creator": "^0.1.1",
-		"bplist-parser": "^0.3.2",
+		"bplist-creator": "^0.3.0",
+		"bplist-parser": "^0.5.0",
 		"command-exists": "^1.2.9",
 		"libplist": "^1.0.0",
 		"plist": "github:TooTallNate/plist.js#pull/144/head"
