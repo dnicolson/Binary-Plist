@@ -30,13 +30,6 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"contributes": {
-		"commands": [
-			{
-				"command": "binaryPlistEditor.openWithDefaultEditor",
-				"title": "Open with Default Editor",
-				"category": "Binary Plist"
-			}
-		],
 		"configuration": {
 			"title": "Binary Plist",
 			"properties": {
@@ -70,16 +63,7 @@
 				],
 				"priority": "default"
 			}
-		],
-		"menus": {
-			"editor/title": [
-				{
-					"command": "binaryPlistEditor.openWithDefaultEditor",
-					"when": "activeCustomEditorId == binaryPlistEditor.edit",
-					"group": "navigation"
-				}
-			]
-		}
+		]
 	},
 	"activationEvents": [
 		"onLanguage:xml"
