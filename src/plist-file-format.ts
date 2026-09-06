@@ -47,15 +47,20 @@ class PlutilParser implements Parser {
 }
 
 class PythonParser implements Parser {
+  private command: string;
+
   constructor() {
-    if (!commandExists.sync('python')) {
-      throw new Error('python command not found');
+    const command = ['python3', 'python'].find(candidate => commandExists.sync(candidate));
+    if (!command) {
+      throw new Error('python3 or python command not found');
     }
 
-    const output = spawnSync('python', ['-c', 'import plistlib; plistlib.load']);
+    const output = spawnSync(command, ['-c', 'import plistlib; plistlib.load']);
     if (output.error || (output.stderr && output.stderr.length > 0) || output.status !== 0) {
       throw new Error('python plistlib not available');
     }
+
+    this.command = command;
   }
 
   async toXml(uri: string): Promise<string> {
@@ -68,7 +73,7 @@ fp = open("""${uri.replace(/\\/g,'\\\\')}""", 'rb')
 pl = plistlib.load(fp)
 print(plistlib.dumps(pl).decode('utf-8'))
 `;
-    return await spawnAsync('python', ['-c', python]);
+    return await spawnAsync(this.command, ['-c', python]);
   }
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
@@ -85,7 +90,7 @@ fp.close()
 shutil.copy(path, """${uri.replace(/\\/g,'\\\\')}""")
 os.remove(path)
 `;
-    await spawnAsync('python', ['-c', python], xmlString);
+    await spawnAsync(this.command, ['-c', python], xmlString);
   }
 }
 
