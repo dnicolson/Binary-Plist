@@ -30,6 +30,13 @@
 		"watch": "tsc -watch -p ./"
 	},
 	"contributes": {
+		"commands": [
+			{
+				"command": "binaryPlist.setParser",
+				"title": "Set Parser",
+				"category": "Binary Plist"
+			}
+		],
 		"configuration": {
 			"title": "Binary Plist",
 			"properties": {

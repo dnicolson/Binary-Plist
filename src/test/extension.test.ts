@@ -22,4 +22,12 @@ suite('Extension', () => {
       done();
     }
   });
+
+  test('registers set parser command', async () => {
+    const extension = vscode.extensions.getExtension(EXTENSION_ID)!;
+    await extension.activate();
+
+    const commands = await vscode.commands.getCommands(true);
+    assert.ok(commands.includes('binaryPlist.setParser'));
+  });
 });
