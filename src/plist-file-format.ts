@@ -108,11 +108,13 @@ class NodeParser implements Parser {
   }
 
   async toBinary(uri: string, xmlString: string): Promise<void> {
-    const result = await vscode.window.showQuickPick(['Continue', 'Cancel'], {
-      placeHolder: 'Values of type real that are whole numbers will be saved as type integer. Continue?'
-    });
-    if (result !== 'Continue') {
-      throw Error('Save cancelled.');
+    if (hasWholeNumberRealValues(xmlString)) {
+      const result = await vscode.window.showQuickPick(['Continue', 'Cancel'], {
+        placeHolder: 'Values of type real that are whole numbers will be saved as type integer. Continue?'
+      });
+      if (result !== 'Continue') {
+        throw Error('Save cancelled.');
+      }
     }
 
     try {
@@ -123,6 +125,30 @@ class NodeParser implements Parser {
       throw Error(`An error occurred saving the file: ${message}`);
     }
   }
+}
+
+function hasWholeNumberRealValues(xmlString: string): boolean {
+  const xmlWithoutComments = xmlString.replace(/<!--[\s\S]*?-->/g, '');
+  const realValuePattern = /<real>\s*([^<]*?)\s*<\/real>/g;
+  let match;
+
+  while ((match = realValuePattern.exec(xmlWithoutComments)) !== null) {
+    if (isWholeNumber(match[1])) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isWholeNumber(value: string): boolean {
+  const trimmedValue = value.trim();
+  if (trimmedValue.length === 0) {
+    return false;
+  }
+
+  const parsedValue = Number(trimmedValue);
+  return Number.isFinite(parsedValue) && Number.isInteger(parsedValue);
 }
 
 class LibplistParser implements Parser {
