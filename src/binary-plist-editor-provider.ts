@@ -15,6 +15,7 @@ interface BinaryPlistCustomDocument extends vscode.CustomDocument {
 export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorProvider<BinaryPlistCustomDocument> {
   private plistFileFormat: PlistFileFormat;
   private context: vscode.ExtensionContext;
+  private suppressNextOpenMessageFor = new Set<string>();
 
   constructor(context: vscode.ExtensionContext) {
     this.context = context;
@@ -60,7 +61,9 @@ export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorPro
     if (document.tempFileUri) {
       const openListener = vscode.workspace.onDidOpenTextDocument((openedDoc) => {
         if (openedDoc.uri.fsPath === document.tempFileUri?.fsPath) {
-          vscode.window.showInformationMessage('Opened binary plist as XML. Edit and save to update the original binary file.');
+          if (!this.suppressNextOpenMessageFor.delete(document.uri.fsPath)) {
+            vscode.window.showInformationMessage('Opened binary plist as XML. Edit and save to update the original binary file.');
+          }
           this.context.workspaceState.update('openPlistUris', {});
           let openPlistUris = this.context.workspaceState.get<{ [key: string]: string }>('openPlistUris', {});
           if (!openPlistUris[document.uri.fsPath]) {
@@ -75,9 +78,16 @@ export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorPro
         if (savedDoc.uri.fsPath === document.tempFileUri?.fsPath) {
           try {
             await this.plistFileFormat.xmlToBinary(document.uri.fsPath, savedDoc.getText());
-            vscode.window.showInformationMessage('Binary plist file updated successfully.');
           } catch (error) {
             vscode.window.showErrorMessage(`Failed to save binary plist: ${error}`);
+            return;
+          }
+
+          try {
+            await this.reloadDocument(document);
+            vscode.window.showInformationMessage('Binary plist file updated successfully.');
+          } catch (error) {
+            vscode.window.showErrorMessage(`Binary plist saved, but failed to reload: ${error}`);
           }
         }
       });
@@ -99,6 +109,17 @@ export class BinaryPlistEditorProvider implements vscode.CustomReadonlyEditorPro
     } else {
       await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
       await vscode.commands.executeCommand('vscode.openWith', document.uri, 'default');
+    }
+  }
+
+  private async reloadDocument(document: BinaryPlistCustomDocument): Promise<void> {
+    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+    this.suppressNextOpenMessageFor.add(document.uri.fsPath);
+    try {
+      await vscode.commands.executeCommand('vscode.openWith', document.uri, 'binaryPlistEditor.edit');
+    } catch (error) {
+      this.suppressNextOpenMessageFor.delete(document.uri.fsPath);
+      throw error;
     }
   }
 }
