@@ -13,12 +13,12 @@ async function spawnAsync(command: string, args: string[], input?: string): Prom
     const proc = spawn(command, args);
     let stdout = '';
     let stderr = '';
-    
+
     proc.stdout.on('data', (data) => { stdout += data; });
     proc.stderr.on('data', (data) => { stderr += data; });
     proc.on('close', (code) => code === 0 ? resolve(stdout) : reject(new Error(stderr || `Exit code ${code}`)));
     proc.on('error', reject);
-    
+
     if (input) {
       proc.stdin.end(input);
     }
@@ -114,7 +114,7 @@ class NodeParser implements Parser {
     if (result !== 'Continue') {
       throw Error('Save cancelled.');
     }
-    
+
     try {
       const object = plist.parse(xmlString) as plist.PlistObject | plist.PlistArray;
       const buffer = bplistCreator(object);
@@ -136,10 +136,10 @@ class LibplistParser implements Parser {
     await writeFile(uri, data);
   }
 }
-  
+
 export class PlistFileFormat {
   engine: Parser;
-  constructor(parser: string | undefined) {    
+  constructor(parser: string | undefined) {
     try {
       if (parser === 'plutil') {
         this.engine = new PlutilParser();
