@@ -1,3 +1,11 @@
+### Version 2.1.0
+
+- Add parser selection command
+- Reload plist files after save
+- Improve Python compatibility
+- Update Node.js parser
+- Improve Node.js real type warning
+
 ### Version 2.0.0
 
 - Add libplist engine and engine choice option
