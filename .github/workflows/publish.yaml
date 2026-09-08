@@ -1,0 +1,44 @@
+name: Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+
+    - name: Install Node.js
+      uses: actions/setup-node@v5
+      with:
+        node-version: 24
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Check tag matches package version
+      run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+
+    - name: Test
+      run: xvfb-run -a npm test
+
+    - name: Package extension
+      run: npm exec --yes --loglevel=error --package @vscode/vsce@3.9.2 -- vsce package --out "$RUNNER_TEMP/binary-plist.vsix"
+
+    - name: Publish to Visual Studio Marketplace
+      run: npm exec --yes --loglevel=error --package @vscode/vsce@3.9.2 -- vsce publish --packagePath "$RUNNER_TEMP/binary-plist.vsix" --skip-duplicate
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
+
+    - name: Publish to Open VSX
+      run: npm exec --yes --loglevel=error --package ovsx@1.1.1 -- ovsx publish "$RUNNER_TEMP/binary-plist.vsix" --skip-duplicate
+      env:
+        OVSX_PAT: ${{ secrets.OVSX_PAT }}
