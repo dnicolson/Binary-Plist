@@ -4,6 +4,7 @@ import { spawnSync }  from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import bplistCreator from 'bplist-creator';
 
 import { PlistFileFormat } from '../plist-file-format';
 
@@ -71,6 +72,18 @@ suite('Plist file format', () => {
     await plistFileFormat.xmlToBinary(tmpFilePath, xmlString);
     const fileStat = fs.statSync(tmpFilePath);
     assert.strictEqual(fileStat.size, 68);
+    fs.unlinkSync(tmpFilePath);
+  });
+
+  test('node invalid char replacement', async () => {
+    const plistFileFormat = new PlistFileFormat('node');
+    const buffer = bplistCreator({ 'bad\u0001key': 'hello\u0001world' });
+    const tmpFilePath = path.join(os.tmpdir(), `tmp-${Date.now()}.plist`);
+    fs.writeFileSync(tmpFilePath, buffer);
+
+    const xmlString = await plistFileFormat.binaryToXml(tmpFilePath);
+    assert.ok(xmlString.indexOf('�') !== -1);
+
     fs.unlinkSync(tmpFilePath);
   });
 });

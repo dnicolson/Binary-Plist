@@ -1,11 +1,9 @@
 import * as vscode from 'vscode';
 import { spawnSync, spawn }  from 'child_process';
 import commandExists from 'command-exists';
-import * as plist from "plist";
-import bplistCreator from 'bplist-creator';
+import bplistCreator, { type PlistJsObj } from 'bplist-creator';
 import { parseFileSync } from 'bplist-parser';
 import { readFile, writeFile } from 'fs/promises';
-import { CreateOptions } from 'xmlbuilder';
 import { binaryToXml as libplistBinaryToXml, xmlToBinary as libplistXmlToBinary } from 'libplist';
 
 async function spawnAsync(command: string, args: string[], input?: string): Promise<string> {
@@ -97,8 +95,8 @@ os.remove(path)
 class NodeParser implements Parser {
   async toXml(uri: string): Promise<string> {
     const content = parseFileSync(uri)[0];
-    // @ts-ignore
-    const plistContent = plist.build(content, {}, { invalidCharReplacement: '�' } as CreateOptions);
+    const { build } = await import('plist');
+    const plistContent = build(content, { invalidCharReplacement: '�' });
     if (plistContent.indexOf('�') !== -1) {
       vscode.window.showWarningMessage(
         'The “�” symbol appears in this editor, possibly due to control characters in the original file. If you save it now, those symbols will be saved too.'
@@ -118,8 +116,9 @@ class NodeParser implements Parser {
     }
 
     try {
-      const object = plist.parse(xmlString) as plist.PlistObject | plist.PlistArray;
-      const buffer = bplistCreator(object);
+      const { parse } = await import('plist');
+      const object = parse(xmlString);
+      const buffer = bplistCreator(object as PlistJsObj);
       await writeFile(uri, buffer);
     } catch(message) {
       throw Error(`An error occurred saving the file: ${message}`);

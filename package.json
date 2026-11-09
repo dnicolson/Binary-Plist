@@ -80,18 +80,17 @@
 		"bplist-parser": "^0.5.0",
 		"command-exists": "^1.2.9",
 		"libplist": "^1.0.0",
-		"plist": "github:TooTallNate/plist.js#pull/144/head"
+		"plist": "^5.1.1"
 	},
 	"devDependencies": {
 		"@types/command-exists": "^1.2.3",
-		"@types/plist": "^3.0.5",
 		"@types/mocha": "^10.0.10",
-		"typescript": "^5.9.3",
 		"@types/node": "26.x",
 		"@types/vscode": "1.109.0",
 		"@vscode/test-cli": "^0.0.15",
 		"@vscode/test-electron": "^3.1.0",
 		"eslint": "^10.8.1",
+		"typescript": "^5.9.3",
 		"typescript-eslint": "^8.67.0"
 	},
 	"engines": {
