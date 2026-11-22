@@ -79,7 +79,7 @@
 		"bplist-creator": "^0.4.0",
 		"bplist-parser": "^0.6.0",
 		"command-exists": "^1.2.9",
-		"libplist": "^1.0.0",
+		"libplist": "^1.0.1",
 		"plist": "^5.1.2"
 	},
 	"devDependencies": {
