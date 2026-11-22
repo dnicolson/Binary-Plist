@@ -1,3 +1,13 @@
+### Version 2.1.2
+
+- Bump plist
+- Bump libplist
+
+### Version 2.1.1
+
+- Bump bplist-creator and bplist-parser
+- Bump plist
+
 ### Version 2.1.0
 
 - Add parser selection command
