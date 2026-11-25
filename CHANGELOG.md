@@ -1,3 +1,7 @@
+### Version 2.1.3
+
+- Bump bplist-creator and bplist-parser
+
 ### Version 2.1.2
 
 - Bump plist
